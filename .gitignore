@@ -1,6 +1,10 @@
 
 # Created by https://www.gitignore.io/api/django,python
 
+### Sublimetext stuff ###
+*.sublime-workspace
+*.sublime-project
+
 ### Django ###
 *.log
 *.pot
