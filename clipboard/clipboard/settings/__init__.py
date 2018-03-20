@@ -1,1 +1,1 @@
-from planning.settings.local import *
+from clipboard.settings.local import *
