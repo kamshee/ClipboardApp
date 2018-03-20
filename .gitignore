@@ -1,9 +1,12 @@
 
-# Created by https://www.gitignore.io/api/django,python
+### ignore local environment/security  settings: ###
+clipboard/clipboard/settings/local.py
 
 ### Sublimetext stuff ###
 *.sublime-workspace
 *.sublime-project
+
+# Below created by https://www.gitignore.io/api/django,python
 
 ### Django ###
 *.log
