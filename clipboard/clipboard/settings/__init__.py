@@ -1,0 +1,1 @@
+from planning.settings.local import *
