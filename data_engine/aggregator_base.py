@@ -25,11 +25,6 @@ class AggregatorBase:
         self.start_timestamp = request_format_utils.min_timestamp_for_day(start_date)
         self.end_timestamp = request_format_utils.max_timestamp_for_day(end_date)
 
-        # try:
-        #     self.docker_ip = os.environ['DOCKER_IP']
-        # except KeyError:
-        #     print('Error: DOCKER_IP not set. If this value was recently set, close all python processes and try again')
-
     def save_events(self, event_list):
         if len(event_list) == 0:
             return

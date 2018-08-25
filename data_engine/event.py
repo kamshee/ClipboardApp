@@ -114,7 +114,8 @@ class EventManager:
 class EventFieldData:
     def __init__(self, item, data):
         self.item = item
-        self.data = data
+        #self.data = list(map(lambda s: s.strip(), data))
+        self.data = DataUtils.remove_extraneous_html(data)
 
     def remove_html(self, remove_all_whitespace = False):
         self.data = DataUtils.remove_html(self.data, remove_all_whitespace)

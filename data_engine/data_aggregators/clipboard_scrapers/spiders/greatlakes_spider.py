@@ -20,16 +20,38 @@ class GreatLakesSpider(Spider, SpiderBase):
         yield self.get_request('events/', {})
 
     def parse(self, response):
-        titles = self.extract('title', response.css, '.tribe-event-url::text')
-        urls = self.extract('url', response.css, '.tribe-event-url::attr(href)')
-        dates, time_ranges = self.extract_multiple(
+        # parser_factory = ParserFactory(response, 'Alliance for the Great Lakes')
+
+        # parser.extract('.tribe-event-url').save('title')
+        # parser.extract('.tribe-event-url::attr(href)').save('url')
+        # parser.extract('.tribe-event-schedule-details').split('@').save('date', 'time_range')
+        # parser.extract('.tribe-address').map(DataUtils.remove_excess_spaces).save('address')
+        # parser.extract('.tribe-events-list-event-description').save('description')
+        
+        # return parser.create_events()
+
+        parser = self.create_parser(response)
+        titles = parser.parse('title', '.tribe-event-url')
+        urls = parser.parse('url', '.tribe-event-url', extract_func=lambda i: i.attr('href'))
+        dates, time_ranges = parser.parse_multiple(
             {'date': lambda s: s.split('@')[0], 
             'time_range': lambda s: s.split('@')[1]}, 
-            response.css, '.tribe-event-schedule-details')
-        dates.remove_html()
-        time_ranges.remove_html()
-        addresses = self.extract('address', response.css, '.tribe-address').remove_html().map(
-            DataUtils.remove_excess_spaces)
-        descriptions = self.extract('description', response.css, '.tribe-events-list-event-description').remove_html()
+            '.tribe-event-schedule-details', iter_children=True)
+        addresses = parser.parse('address', '.tribe-address', iter_children=True)
+        descriptions = parser.parse('description', '.tribe-events-list-event-description', iter_children=True)
 
         return self.create_events('Alliance for the Great Lakes', titles, urls, dates, time_ranges, addresses, descriptions)
+
+        # titles = self.extract('title', response.css, '.tribe-event-url::text')
+        # urls = self.extract('url', response.css, '.tribe-event-url::attr(href)')
+        # dates, time_ranges = self.extract_multiple(
+        #     {'date': lambda s: s.split('@')[0], 
+        #     'time_range': lambda s: s.split('@')[1]}, 
+        #     response.css, '.tribe-event-schedule-details')
+        # dates.remove_html()
+        # time_ranges.remove_html()
+        # addresses = self.extract('address', response.css, '.tribe-address').remove_html().map(
+        #     DataUtils.remove_excess_spaces)
+        # descriptions = self.extract('description', response.css, '.tribe-events-list-event-description').remove_html()
+
+        # return self.create_events('Alliance for the Great Lakes', titles, urls, dates, time_ranges, addresses, descriptions)

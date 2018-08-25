@@ -21,6 +21,15 @@ class DataUtils:
         return re.sub(r'\W+', '', misc_removed , re.UNICODE)
 
     @staticmethod
+    def remove_extraneous_html(html_data):
+        if isinstance(html_data, list):
+            return [DataUtils.remove_extraneous_html(data) for data in html_data]
+        # \xa0 is returned when a &nbsp is encountered
+        # Add any extraneous html data here
+        text_to_remove = r'[\xa0,\n]'
+        return re.sub(text_to_remove, html_data).strip()
+
+    @staticmethod
     def remove_excess_spaces(string):
         return re.sub(r'\s+', ' ', string.strip())
 
