@@ -27,7 +27,7 @@ class DataUtils:
         # \xa0 is returned when a &nbsp is encountered
         # Add any extraneous html data here
         text_to_remove = r'[\xa0,\n]'
-        return re.sub(text_to_remove, html_data).strip()
+        return re.sub(text_to_remove, '', html_data).strip()
 
     @staticmethod
     def remove_excess_spaces(string):

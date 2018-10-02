@@ -4,9 +4,9 @@ from scrapy.spiders import Spider
 from data_utils import DataUtils
 from spider_base import SpiderBase
 
+# This spider is deprecated in favor of the iCal parser, 
+# but I'm keeping it around for testing purposes for now
 
-# greatlakes.org has an iCal feed: https://greatlakes.org/events/?ical=1&tribe_display=list
-# Parsing that instead of the website would fix many of the imperfections of this scraper.
 class GreatLakesSpider(Spider, SpiderBase):
     name = 'greatlakes'
     allowed_domains = ['greatlakes.org']

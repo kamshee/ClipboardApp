@@ -4,36 +4,36 @@ from pyquery import PyQuery
 from aggregator_base import AggregatorBase
 from event import Event, EventFieldData
 
-class EventStore(dict):
-    def __init__(self, date_format):
-        self.date_format = date_format
+# class EventStore(dict):
+#     def __init__(self, date_format):
+#         self.date_format = date_format
 
-    def create_events(self):
-        key_list = list(self.keys)
-        initial_count = len(self[key_list[0]])
-        for key, value in self.values:
-            if len(value) != initial_count:
-                # All selectors must return the same amount of data because it's impossible to know which event is missing data otherwise
-                raise ValueError('Selectors returned data of differing lengths')
+#     def create_events(self):
+#         key_list = list(self.keys)
+#         initial_count = len(self[key_list[0]])
+#         for key, value in self.values:
+#             if len(value) != initial_count:
+#                 # All selectors must return the same amount of data because it's impossible to know which event is missing data otherwise
+#                 raise ValueError('Selectors returned data of differing lengths')
 
-        events = (Event.from_dict({arg.item: arg.data[i] for arg in args}, self.time_utils.date_format) for i in range(count))
-        for event in events:
-            # Only return events that are in the date range that we care about
-            if self.time_utils.time_range_is_between(event['start_timestamp'], event['end_timestamp'], self.start_timestamp, self.end_timestamp):
-                event['organization'] = organization
-                yield event
+#         events = (Event.from_dict({arg.item: arg.data[i] for arg in args}, self.time_utils.date_format) for i in range(count))
+#         for event in events:
+#             # Only return events that are in the date range that we care about
+#             if self.time_utils.time_range_is_between(event['start_timestamp'], event['end_timestamp'], self.start_timestamp, self.end_timestamp):
+#                 event['organization'] = organization
+#                 yield event
 
-class ParserFactory:
-    def __init__(self, response, title, date_format):
-        self.response = response
-        self.title = title
-        self.event_store = EventStore(date_format)
+# class ParserFactory:
+#     def __init__(self, response, title, date_format):
+#         self.response = response
+#         self.title = title
+#         self.event_store = EventStore(date_format)
     
-    def create(self):
-        return EventParser(self.response, self.title, self.event_store)
+#     def create(self):
+#         return EventParser(self.response, self.title, self.event_store)
 
-    def create_events(self):
-        return self.event_store.create_events()
+#     def create_events(self):
+#         return self.event_store.create_events()
 
 # class EventParser:
 #     def __init__(self, response, title, event_store):
@@ -60,7 +60,7 @@ class EventParser:
     def text_extract(self, html_object):
         try:
             return html_object.text()
-        except ValueError:
+        except (ValueError, TypeError):
             return html_object.text
 
     def basic_extract(self, selector, extract_func, selector_func, transform_func, iter_children):
@@ -76,7 +76,7 @@ class EventParser:
             pq_parsed = pq_parsed.items()    
 
         if extract_func != None:
-            pq_parsed = [extract_func(i) for i in pq_parsed]
+            pq_parsed = [extract_func(PyQuery(i)) for i in pq_parsed]
         
         if transform_func != None:
             pq_parsed = transform_func(pq_parsed)

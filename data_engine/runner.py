@@ -64,18 +64,18 @@ if __name__ == '__main__':
     print('Running data engine...')
 
     crawlerProcess = CrawlerProcess(get_project_settings())
-    apiProcess = ApiProcess()
+    #apiProcess = ApiProcess()
 
     crawlerProcess.crawl(HistorySpider, start_date, end_date)
-    crawlerProcess.crawl(WpbccSpider, start_date, end_date)
-    crawlerProcess.crawl(LWVchicago, start_date, end_date)
+    #crawlerProcess.crawl(WpbccSpider, start_date, end_date)
+    #crawlerProcess.crawl(LWVchicago, start_date, end_date)
 
-    apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
-    apiProcess.start_api_calls(start_date, end_date, GreatLakesReader)
+    #apiProcess.start_api_calls(start_date, end_date, LibraryEvents)
+    #apiProcess.start_api_calls(start_date, end_date, GreatLakesReader)
 
     crawlerProcess.start()
     crawlerProcess.join()
-    apiProcess.join()
+    #apiProcess.join()
 
     print('Data engine complete')
  

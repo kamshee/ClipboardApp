@@ -84,16 +84,18 @@ class HistorySpider(CrawlSpider, SpiderBase):
 
     def parse_item(self, response):
         parser = self.create_parser(response)
-        address = parser.extract('//h3[contains(text(), "Event Location")]/following-sibling::div/p').result()
-        price = parser.extract('.price').result()
-        [i.text() for i in pq('.details-box h3:contains("Event Location")').siblings('.row').items()]
-        return Event(url=response.meta['clicked_url'], address=address, price=price[0] if len(price) > 0 else '0')
+        #address = parser.extract('//h3[contains(text(), "Event Location")]/following-sibling::div/p').result()
+        address = parser.parse('address', 'h3:contains("Event Location")', selector_func=lambda i: i.siblings().items('p.bold'))
+        #price = parser.extract('.price').result()
+        price = parser.parse('price', '.price')
 
-        location = self.extract('location', response.xpath, '//h3[contains(text(), "Event Location")]/following-sibling::div/p').remove_html()
-        price = self.extract('price', response.css, '.price').remove_html(True)
+        return Event(url=response.meta['clicked_url'], address=address.data, price=price.data[0] if len(price.data) > 0 else '0')
 
-        return Event(
-            url = response.meta['clicked_url'],
-            address = location.data,
-            price = price.data[0] if len(price.data) > 0 else '0'
-        )
+        # location = self.extract('location', response.xpath, '//h3[contains(text(), "Event Location")]/following-sibling::div/p').remove_html()
+        # price = self.extract('price', response.css, '.price').remove_html(True)
+
+        # return Event(
+        #     url = response.meta['clicked_url'],
+        #     address = location.data,
+        #     price = price.data[0] if len(price.data) > 0 else '0'
+        # )

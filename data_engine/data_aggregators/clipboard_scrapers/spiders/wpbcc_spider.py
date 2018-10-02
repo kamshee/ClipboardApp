@@ -39,14 +39,14 @@ class WpbccSpider(CrawlSpider, SpiderBase):
             return any(string.startswith(value) for value in values)
 
         def get_field(field, fields):
-            filtered = [value for value in fields value.startswith(field)]
+            filtered = [value for value in fields if value.startswith(field)]
             return filtered[0] if filtered else ''
 
         def get_lister_content(selector_result, field):
             fields = selector_result.split('\n')
             if field == 'Time:':
                 return get_field(field)
-            if field == 'Address:'
+            if field == 'Address:':
                 place = get_field('Place:')
                 address = get_field('Address:')
                 if place and address:
