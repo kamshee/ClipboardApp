@@ -4,6 +4,7 @@ import time
 
 from aggregator_base import AggregatorBase
 from cache_call import cache_call
+import scrapy
 from config import API_DELAY_SECONDS
 
 
@@ -21,6 +22,9 @@ class ApiBase(AggregatorBase):
             'Accept-Language': 'en-US,en;q=0.9',
             'Connection': 'keep-alive'
         })
+    
+    def start_requests(self):
+        yield scrapy.Request('http://wikipedia.org')
 
     def wait(self, sleep_time=None):
         if sleep_time == None:
